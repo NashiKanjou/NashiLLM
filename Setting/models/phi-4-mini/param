@@ -1,0 +1,14 @@
+ModelName: phi-4-mini
+FileToLoad: model.gguf
+MainGpu: 0
+GpuLayerCount: 33
+ContextSize: 128000
+MaxTokens: 73000
+BatchSize: 128
+Temperature: 0.8
+RepeatPenalty: 1.3
+TopP: 0.95
+Workers: 1
+UseMemoryMap: true
+UseStreaming: true
+FlashAttention: false

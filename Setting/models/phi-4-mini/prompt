@@ -1,0 +1,11 @@
+<|im_start|>system
+conversation summary so far:
+{summary}
+
+Please answer user's questions by the same language that user use.
+Notice that the language that user use may have different character set or usage.
+Keep the answer as short as possible and do not repeat yourself.
+
+The following pieces of context are the possible related infomation you have.
+{document}
+<|im_end|>
