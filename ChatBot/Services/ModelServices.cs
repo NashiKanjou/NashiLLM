@@ -79,6 +79,7 @@ namespace ChatBot.Services
                         };
 
                         var Setting = new ChatModelSetting();
+                        Setting.MaxTokens = param.MaxTokens;
                         Setting.ContextSize = (uint)param.ContextSize;
                         Setting.UseStreaming = param.UseStreaming;
                         Setting.SystemPrompt = File.ReadAllText(modelPath + Path.DirectorySeparatorChar + "prompt");
@@ -140,6 +141,7 @@ namespace ChatBot.Services
                     };
 
                     var Setting = new ChatModelSetting();
+                    Setting.MaxTokens = summaryParam.MaxTokens;
                     Setting.ContextSize = (uint)summaryParam.ContextSize;
                     Setting.UseStreaming = summaryParam.UseStreaming;
                     Setting.SummaryPrompt = File.ReadAllText(summaryModelPath + Path.DirectorySeparatorChar + "prompt");

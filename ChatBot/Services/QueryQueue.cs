@@ -141,8 +141,8 @@ namespace ChatBot.Services
             var chatHistory = new ChatHistory();
             string prompt = _modelSetting.SystemPrompt.Replace(PromptParams.Summary, summary).Replace(PromptParams.Document, document);
             chatHistory.AddMessage(AuthorRole.System, prompt);
-            int maxTokens = (_modelSetting.ContextSize / 2 > int.MaxValue) ? int.MaxValue : (int)(_modelSetting.ContextSize / 2);
-            int currentTokens = Utils.LLM.Utils.CountTokens(weights,prompt);
+            long tokenLimit = _modelSetting.ContextSize - _modelSetting.MaxTokens;//(_modelSetting.ContextSize / 2 > int.MaxValue) ? int.MaxValue : (int)(_modelSetting.ContextSize / 2);
+            long currentTokens = Utils.LLM.Utils.CountTokens(weights, prompt);
             currentTokens += Utils.LLM.Utils.CountTokens(weights, query);
 
             //Load history
@@ -166,7 +166,7 @@ namespace ChatBot.Services
                 }
 
                 int tokens = Utils.LLM.Utils.CountTokens(weights, content);
-                if (currentTokens + tokens > maxTokens)
+                if (currentTokens + tokens > tokenLimit)
                     break;
 
                 finalHistory.Insert(0, (role, content));

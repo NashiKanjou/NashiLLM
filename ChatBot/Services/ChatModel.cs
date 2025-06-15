@@ -9,6 +9,7 @@ namespace ChatBot.Services
     internal class ChatModelSetting
     {
         internal uint ContextSize;
+        internal int MaxTokens;
         internal bool UseStreaming;
         internal string SystemPrompt = string.Empty;
         internal string UserFormat = string.Empty;

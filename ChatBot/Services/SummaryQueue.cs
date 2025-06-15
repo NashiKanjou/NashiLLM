@@ -1,7 +1,6 @@
 ﻿using ChatBot.Binding;
 using ChatBot.Session;
 using ChatBot.Utils.LLM;
-using DocumentFormat.OpenXml.Drawing.Charts;
 using LLama;
 using LLama.Common;
 using System.Collections.Concurrent;
@@ -37,7 +36,9 @@ namespace ChatBot.Services
         private static string query_respond = string.Empty;
         private static string format_user = string.Empty;
         private static string format_assistant = string.Empty;
-        private static uint ContextSize;
+        //private static uint ContextSize;
+        //private static int MaxTokens;
+        private static long TokenLimits;
         private static LLamaWeights weights;
         public SummaryQueue(ChatModel model) : this()
         {
@@ -78,8 +79,10 @@ namespace ChatBot.Services
             query_respond = "\n" + model.Setting.AssistantFormat;
             format_assistant = model.Setting.AssistantFormat;
             format_user = model.Setting.UserFormat;
-            ContextSize = model.Setting.ContextSize;
             weights = model.weights;
+            //ContextSize = model.Setting.ContextSize;
+            //MaxTokens = model.Setting.MaxTokens;
+            TokenLimits = model.Setting.ContextSize - model.Setting.MaxTokens;
             return true;
         }
 
@@ -126,8 +129,8 @@ namespace ChatBot.Services
             var chatHistory = new ChatHistory();
             string prompt = summary_prompt.Replace(PromptParams.Summary, summary);
             chatHistory.AddMessage(AuthorRole.System, prompt);
-            int maxTokens = (ContextSize / 2 > int.MaxValue) ? int.MaxValue : (int)(ContextSize / 2);
-            int currentTokens = Utils.LLM.Utils.CountTokens(weights, prompt);
+            // int maxTokens = (ContextSize / 2 > int.MaxValue) ? int.MaxValue : (int)(ContextSize / 2);
+            long currentTokens = Utils.LLM.Utils.CountTokens(weights, prompt);
             currentTokens += Utils.LLM.Utils.CountTokens(weights, query);
             currentTokens += Utils.LLM.Utils.CountTokens(weights, respond);
 
@@ -150,7 +153,7 @@ namespace ChatBot.Services
             foreach (var (role, content) in tempHistory)
             {
                 int tokens = Utils.LLM.Utils.CountTokens(weights, content);
-                if (currentTokens + tokens > maxTokens)
+                if (currentTokens + tokens > TokenLimits)
                     break;
 
                 finalHistory.Insert(0, (role, content));
