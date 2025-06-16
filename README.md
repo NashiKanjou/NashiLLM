@@ -1,4 +1,4 @@
-# ArsCore
+# NashiAI
 
 介紹
 ---
