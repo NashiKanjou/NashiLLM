@@ -22,26 +22,28 @@
 >cuDNN 9.10.1
 >
 LLM模型:
->Microsoft Phi-4 (unsloth/phi-4-Q4_K_M.gguf)
+>Microsoft Phi-4-mini (unsloth/Phi-4-mini-instruct-GGUF/Phi-4-mini-instruct-Q4_K_M.gguf)
 >
 Embedded模型:
->paraphrase-multilingual-MiniLM-L12-v2
->
->Snowflake/snowflake-arctic-embed-l-v2.0
->
->BAAI/bge-m3 (推薦)
+>BAAI/bge-m3 
 >
 
 使用方法
 ---
 系統建置
-> 安裝Nvidia Cuda Toolkit (或對應的驅動程式)
+> 安裝Nvidia Cuda Toolkit 12.9
+> 
+> 安裝cuDNN 9.10.1
+> 
+> 將cuDNN加入系統環境參數當中 (bin底下含有dll的資料夾, 例:C:\Program Files\NVIDIA\CUDNN\v9.10\bin\11.8)
+> 
 
 LLM模型
-> 下載LLM模型重新命名為model.gguf並放置於路徑(.\\models\\[modelname]\\) 
+> 下載LLM模型放置於路徑(.\\models\\[modelname]\\)
+> 根據電腦硬體規格調整設定餐數
 > 
 Embedded模型
-> 下載Embedded模型並重新命名為model.onnx將其與tokenizer.json放置於(.\\embedded_model\\) 
+> 下載Embedded模型model.onnx, tokenizer.json 以及 model.onnx_data放置於(.\\embedded_model\\) 
 >   
 設定檔:
 > 移動Setting底下的所有檔案至執行目錄中並且按照自己所使用的模型進行設定
