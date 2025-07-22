@@ -4,6 +4,7 @@ using ChatBot.Database.Interfaces;
 using ChatBot.Database.KAG;
 using ChatBot.Database.RAG;
 using ChatBot.Utils.Embedding;
+using ChatBot.Utils.Databasse;
 /*
  *  This file is part of ArsCore.
  *
@@ -25,27 +26,21 @@ namespace ChatBot.Session
     class SessionData
     {
 
-        private static string globalRAGPath = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "GlobalData" + Path.DirectorySeparatorChar + "GlobalDocumentData.duckdb";
         internal IHistoryDatabase sessionHistoryDatabase;
         private IRAGDatabase accountRAGDatabase;
-        private IRAGDatabase globalRAGDatabase;
 
-        private static string globalKAGString = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "kuzu_data";
         private IKAGDatabase accountKAGDatabase;
-        private IKAGDatabase globalKAGDatabase;
-
+        
         #region 初始化
         public SessionData(string account_DBString, string session_DBString, string account_KAGString)
         {
             #region RAG
             sessionHistoryDatabase = new HistoryDuckDB(session_DBString);
             accountRAGDatabase = new RAGDuckDB(account_DBString);
-            globalRAGDatabase = new RAGDuckDB(globalRAGPath);
             #endregion
 
             #region KAG
             accountKAGDatabase = new KuzuDBClient(account_KAGString);
-            globalKAGDatabase = new KuzuDBClient(globalKAGString);
             #endregion
 
             Init();
@@ -96,7 +91,7 @@ namespace ChatBot.Session
 
             allResults.AddRange(accountRAGDatabase.FindTopMatches(query, topN, score_threshold));
 
-            allResults.AddRange(globalRAGDatabase.FindTopMatches(query, topN, score_threshold));
+            allResults.AddRange(DatabaseUtils.getGlobalRAGDatabase().FindTopMatches(query, topN, score_threshold));
 
             return allResults
                 .OrderByDescending(r => r.score) // 如果 `FindTopMatches` 已排序可省略
