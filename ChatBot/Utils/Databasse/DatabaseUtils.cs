@@ -25,7 +25,7 @@ namespace ChatBot.Utils.Databasse
 
         private static readonly string global_KAG_data = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "kuzu_data";
 
-        internal static IRAGDatabase? _RAGdatabase;
+        private static IRAGDatabase? _RAGdatabase;
 
         public static void Init()
         {
@@ -70,6 +70,10 @@ namespace ChatBot.Utils.Databasse
         {
             DocumentLoader.DocumentLoader loader = new DocumentLoader.DocumentLoader();
             return loader.Load(_RAGdatabase, path, maxChunkLength, overlap, force);
+        }
+
+        internal static IRAGDatabase? getGlobalRAGDatabase(){
+            return _RAGdatabase;
         }
     }
 }
