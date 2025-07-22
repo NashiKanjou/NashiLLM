@@ -166,6 +166,42 @@ namespace ChatBot.Database.RAG
             }
             Close(_connection, DBAccessMode.ReadWrite);
         }
+
+        public void RemoveDocument(string filename)
+        {
+            _dbLock.EnterWriteLock();
+            var _connection = new DuckDBConnection(BuildConnString(DBAccessMode.ReadWrite));
+            _connection.Open();
+            using (var cmd = _connection.CreateCommand())
+            {
+                cmd.CommandText = "SELECT rowid, Source FROM Documents WHERE Source = ?";
+                cmd.Parameters.Add(new DuckDBParameter(null, filename));
+                using (var reader = cmd.ExecuteReader())
+                {
+
+                    while (reader.Read())
+                    {
+                        long rowId = reader.GetInt64(0);
+                        string sourcePath = reader.GetString(1);
+
+                        
+                            Console.WriteLine($"刪除向量資料庫中有關{sourcePath}的資料列...");
+
+                            using (var deleteCmd = _connection.CreateCommand())
+                            {
+                                {
+                                    deleteCmd.CommandText = "DELETE FROM Documents WHERE rowid = ?";
+                                    deleteCmd.Parameters.Add(new DuckDBParameter(null, rowId));
+                                    //deleteCmd.Parameters.AddWithValue("@rowid", rowId);
+                                    deleteCmd.ExecuteNonQuery();
+                                }
+                            }
+                        
+                    }
+                }
+            }
+            Close(_connection, DBAccessMode.ReadWrite);
+        }
         #endregion
 
         #region SQL
