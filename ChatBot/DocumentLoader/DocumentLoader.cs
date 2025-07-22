@@ -42,7 +42,7 @@ namespace ChatBot.DocumentLoader
                     return false;
                 }
             }
-
+            db.RemoveDocument(file);
             string extension = Path.GetExtension(file).ToLowerInvariant();
 
             switch (extension)
