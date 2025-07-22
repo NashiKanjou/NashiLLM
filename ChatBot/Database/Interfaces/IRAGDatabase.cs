@@ -28,6 +28,8 @@ namespace ChatBot.Database.Interfaces
 
         void InsertDocument(string insertTime, string path, string text, int award);
 
+        void RemoveDocument(string filename);
+        
         int UpdateAward(string id, int newAward);
 
         DateTime? GetLatestInsertTimeBySource(string source);
