@@ -25,6 +25,8 @@ namespace ChatBot.Utils.Databasse
 
         private static readonly string global_KAG_data = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "kuzu_data";
 
+        private IKAGDatabase _globalKAGDatabase;
+        
         private static IRAGDatabase? _RAGdatabase;
 
         public static void Init()
@@ -43,7 +45,7 @@ namespace ChatBot.Utils.Databasse
             {
                 Directory.CreateDirectory(GlobalDataDir);
             }
-
+            _globalKAGDatabase = new KuzuDBClient(globalKAGString);
             _RAGdatabase = new RAGDuckDB(globalRAGPath);
             InitGlobalRAG(_RAGdatabase);
             #endregion
@@ -74,6 +76,10 @@ namespace ChatBot.Utils.Databasse
 
         internal static IRAGDatabase? getGlobalRAGDatabase(){
             return _RAGdatabase;
+        }
+        
+         internal static IKAGDatabase? getGlobalKAGDatabase(){
+            return _globalKAGDatabase;
         }
     }
 }
