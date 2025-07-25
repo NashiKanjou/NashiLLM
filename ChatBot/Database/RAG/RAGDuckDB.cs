@@ -348,7 +348,7 @@ namespace ChatBot.Database.RAG
                                 byte[] blob = ms.ToArray();
 
                                 float[] embedding = TokenizerUtils.DeserializeEmbedding(blob);
-                                double score = CosineSimilarity(queryEmbedding, embedding);
+                                double score = SimilarityTest.GetSimilarity(query,queryEmbedding, text,embedding);
 
                                 if (score >= score_threshold)
                                 {
@@ -374,32 +374,6 @@ namespace ChatBot.Database.RAG
                 .Take(topN)
                 .Select(r => (r.embedding, r.id, r.text, r.score))
                 .ToArray();
-        }
-        private static double CosineSimilarity(float[] vectorA, float[] vectorB)
-        {
-            if (vectorA.Length != vectorB.Length)
-            {
-                return -1;
-                //throw new InvalidDataException($"向量長度不一致：{vectorA.Length} vs {vectorB.Length}");
-            }
-            double dot = 0.0;
-            double magA = 0.0;
-            double magB = 0.0;
-
-            for (int i = 0; i < vectorA.Length; i++)
-            {
-                dot += vectorA[i] * vectorB[i];
-                magA += vectorA[i] * vectorA[i];
-                magB += vectorB[i] * vectorB[i];
-            }
-
-            magA = Math.Sqrt(magA);
-            magB = Math.Sqrt(magB);
-
-            if (magA == 0 || magB == 0)
-                return 0;
-
-            return dot / (magA * magB);
         }
 
         public void InsertDocument(string insertTime, string source, string text, int award)
