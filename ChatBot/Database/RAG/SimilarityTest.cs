@@ -21,19 +21,19 @@ namespace ChatBot.Database.RAG
                 {
                     int cost = a[i - 1] == b[j - 1] ? 0 : 1;
                     d[i, j] = new int[] {
-            d[i - 1, j] + 1,     // deletion
-            d[i, j - 1] + 1,     // insertion
-            d[i - 1, j - 1] + cost // substitution
-        }.Min();
+                        d[i - 1, j] + 1,     // deletion
+                        d[i, j - 1] + 1,     // insertion
+                        d[i - 1, j - 1] + cost // substitution
+                    }.Min();
                 }
 
             return d[a.Length, b.Length];
         }
-        internal static float NormalizedLevenshtein(string a, string b)
+        internal static double NormalizedLevenshtein(string a, string b)
         {
             int dist = LevenshteinDistance(a, b);
             int maxLen = Math.Max(a.Length, b.Length);
-            return 1 - (float)dist / maxLen;
+            return 1 - (double)dist / maxLen;
         }
         internal static double CosineSimilarity(float[] vectorA, float[] vectorB)
         {
